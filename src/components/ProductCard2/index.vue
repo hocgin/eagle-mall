@@ -1,27 +1,23 @@
 <template>
   <Cell>
-    <template #icon>
-      <Checkbox v-model="checkedValue"/>
-    </template>
     <template #default>
       <Card class="product-cart"
             :title="title"
+            :num="num"
+            :origin-price="originprice"
             :desc="desc"
             :price="price"
             :thumb="thumb">
-        <template #num>
-          <Stepper v-model="numValue"></Stepper>
-        </template>
       </Card>
     </template>
   </Cell>
 </template>
 <script>
-  import {Card, Cell, Checkbox, Stepper} from 'vant'
+  import {Card, Cell} from 'vant'
 
   export default {
     components: {
-      Cell, Checkbox, Card, Stepper
+      Cell, Card
     },
     props: {
       checked: {
@@ -39,11 +35,6 @@
         required: false,
         default: ""
       },
-      desc: {
-        type: String,
-        required: false,
-        default: ""
-      },
       thumb: {
         type: String,
         required: false,
@@ -53,25 +44,25 @@
         type: String,
         required: true
       },
-      onChangeCheck: {
-        type: Function,
-        required: false
+      originprice: {
+        type: String,
+        required: true
+      },
+      spec: {
+        type: Array,
+        required: false,
+        default: () => []
       }
     },
-    watch: {
-      numValue(value) {
-        this.$emit('update:num', value);
-      },
-      checkedValue(value) {
-        this.$emit('update:checked', value);
+    created() {
+      if (this.spec.length > 0) {
+        this.desc = `规格: ` + (this.spec || []).map(({key, value}) => `${key}: ${value}`)
+          .reduce((str1, str2) => `${str1};${str2}`);
       }
     },
     methods: {},
     data() {
-      return {
-        checkedValue: false,
-        numValue: this.num
-      }
+      return {}
     },
     inheritAttrs: false
   }
@@ -79,5 +70,6 @@
 <style scoped>
   .product-cart {
     background-color: #fff !important;
+    padding: 0;
   }
 </style>

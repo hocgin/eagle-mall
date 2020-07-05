@@ -1,25 +1,37 @@
 import request from '@/utils/request';
 
 const API = {
-  paging: `/api-mini/product/_paging`,
-  getById: id => `/api-mini/product/${id}`,
+  addMyAddress: `/api-mini/my/address`,
+  updateMyAddress: (id) => `/api-mini/my/address/${id}`,
+  deleteMyAddress: `/api-mini/my/address`,
+  pagingMyAddress: `/api-mini/my/address/_paging`,
 };
 
 export default {
 
-  paging(payload = {}) {
-    return request(API.paging, {
+  addMyAddress(payload = {}) {
+    return request(API.addMyAddress, {
       method: 'POST',
-      body: {
-        ...payload,
-      },
+      body: {...payload,},
     });
   },
-
-  getById({id}) {
-    return request(API.getById(id), {
-      method: 'GET',
+  updateMyAddress({id, ...payload}) {
+    return request(API.updateMyAddress(id), {
+      method: 'PUT',
+      body: {...payload,},
     });
-  }
+  },
+  deleteMyAddress({...payload}) {
+    return request(API.updateMyAddress, {
+      method: 'DELETE',
+      body: {...payload,},
+    });
+  },
+  pagingMyAddress(payload = {}) {
+    return request(API.pagingMyAddress, {
+      method: 'POST',
+      body: {...payload,},
+    });
+  },
 
 };

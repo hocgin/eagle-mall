@@ -27,6 +27,18 @@ const router = new VueRouter({
       path: '/product/:id',
       name: 'product-detail',
       component: () => import('@/views/product/detail/index')
+    }, {
+      path: '/shopping-cart',
+      name: 'shopping-cart',
+      component: () => import('@/views/shoppingCart/index')
+    }, {
+      path: '/order/confirm',
+      name: 'order-confirm',
+      component: () => import('@/views/order/confirm/index')
+    }, {
+      path: '/order/payment',
+      name: 'order-payment',
+      component: () => import('@/views/order/payment/index')
     }]
   }]
 });

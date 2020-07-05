@@ -7,7 +7,7 @@
               v-model="loading">
           <ProductCard v-for="item in list"
                        v-bind:checked.sync="item.checked"
-                       :num="item.quantity"
+                       v-bind:num.sync="item.quantity"
                        :thumb="item.imageUrl"
                        :title="item.title"
                        :price="formatMoney(item.price)"
@@ -27,6 +27,7 @@
   import ProductCard from '@/components/ProductCard'
   import * as models from "@/store/models-types";
   import * as actions from "@/store/actions-types";
+  import Goto from "@/utils/Goto";
 
   export default {
     components: {ProductCard, SubmitBar, List, Form},
@@ -34,7 +35,7 @@
       return {
         loading: false,
         finished: false,
-        selected: [],
+        shoppingCart: [],
         totalAmount: null,
         list: []
       }
@@ -57,19 +58,31 @@
             imageUrl: addProductImageUrl ?? '404',
             status: cartItemStatus,
             quantity: quantity,
-            skuId: skuId,
-            checked: false
+            skuId: skuId
           }));
         },
         deep: true
       },
       list: {
         handler(values = []) {
-          let skuItems = values.filter(({checked = false}) => checked).map(({skuId, quantity}) => ({
+          let skuItems = values.map(({skuId, quantity, checked}) => ({
             skuId: skuId,
             quantity: quantity,
+            checked: checked,
           }));
-          this._calcOrder(skuItems);
+
+          if (this.shoppingCart.length !== 0) {
+            for (let {skuId, quantity} of skuItems) {
+              let index = this.shoppingCart.findIndex(item => (item.skuId === skuId && item.quantity === quantity));
+              console.log('update', index, index < 0, skuId, quantity);
+              if (index < 0) {
+                this._updateMyShoppingCart(skuId, quantity);
+              }
+            }
+          }
+
+          this.shoppingCart = (skuItems || []).filter(({quantity}) => quantity !== 0);
+          this._calcOrder((this.shoppingCart || []).filter(({checked = false}) => checked));
         },
         deep: true
       }
@@ -77,6 +90,8 @@
     methods: {
       ...mapActions(models.ME, {
         pagingMyShoppingCart: actions.PAGING_MY_SHOPPING_CART,
+        deleteMyShoppingCart: actions.DELETE_MY_SHOPPING_CART,
+        updateMyShoppingCart: actions.UPDATE_MY_SHOPPING_CART,
       }),
       ...mapActions(models.APPS, {
         calcOrder: actions.CALC_ORDER
@@ -95,7 +110,6 @@
         });
       },
       _calcOrder(values = []) {
-        this.selected = values;
         if (values.length === 0) {
           this.totalAmount = null;
           return;
@@ -112,8 +126,17 @@
           callback
         });
       },
-      onSubmit(values) {
-        console.log(this.list, '||-||', values);
+      _updateMyShoppingCart(skuId, quantity) {
+        console.log('加载xx', skuId, quantity);
+        if (quantity <= 0) {
+          this.deleteMyShoppingCart({payload: {id: skuId}});
+          this.onLoad();
+        } else {
+          this.updateMyShoppingCart({payload: {skuId, quantity}});
+        }
+      },
+      onSubmit() {
+        Goto.confirmOrder((this.shoppingCart || []).filter(({checked = false}) => checked))
       },
     }
   }
@@ -124,14 +147,6 @@
     box-sizing: border-box;
     background-color: #F7F8FA;
     min-height: 100vh;
-  }
-
-  .card-row {
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
-    overflow: hidden;
-    background-color: #fff !important;
   }
 
 </style>

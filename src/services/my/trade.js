@@ -1,23 +1,25 @@
 import request from '@/utils/request';
+import {stringify} from 'qs';
 
 const API = {
-  pagingMyOrder: `/api-mini/my/order/_paging`,
-  createMyOrder: `/api-mini/my/order/create`,
+  getWaitPaymentOrder: (queryString) => `/api/payment/trade?${queryString}`,
+  payTrade: `/api/payment/pay`,
 };
 
 export default {
 
-  pagingMyOrder(payload = {}) {
-    return request(API.pagingMyOrder, {
-      method: 'POST',
-      body: {...payload,},
+  getWaitPaymentOrder(payload = {}) {
+    return request(API.getWaitPaymentOrder(stringify(payload)), {
+      method: 'GET',
     });
   },
 
-  createMyOrder(payload = {}) {
-    return request(API.createMyOrder, {
+  payTrade(payload = {}) {
+    return request(API.payTrade, {
       method: 'POST',
-      body: {...payload,},
+      body: {
+        ...payload
+      }
     });
   },
 

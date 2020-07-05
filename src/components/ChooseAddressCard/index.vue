@@ -1,10 +1,7 @@
 <template>
   <div class="address-cart-container">
-    <div class="address-cart-name">
-      <Icon name="location-o"/>
-      张三 13600747016
-    </div>
-    <div class="address-cart-detail">浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室</div>
+    <Icon name="location-o"/>
+    请选择收货地址
   </div>
 </template>
 
@@ -24,6 +21,8 @@
     background-color: #fff;
     border-radius: 8px;
     position: relative;
+    color: #323233;
+    font-size: 14px;
   }
 
   .address-cart-container::before {
@@ -35,18 +34,6 @@
     background: repeating-linear-gradient(-45deg, #ff6c6c 0, #ff6c6c 20%, transparent 0, transparent 25%, #1989fa 0, #1989fa 45%, transparent 0, transparent 50%);
     background-size: 80px;
     content: '';
-  }
-
-  .address-cart-name {
-    margin-bottom: 8px;
-    font-size: 16px;
-    color: #323233;
-  }
-
-  .address-cart-detail {
-    color: #323233;
-    font-size: 13px;
-    line-height: 18px;
   }
 
 </style>

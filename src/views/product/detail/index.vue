@@ -4,7 +4,9 @@
     <!-- SKU 规格-->
     <Sku v-model="visibleSku"
          :sku="sku"
-         :goods="goods"/>
+         :goods="goods"
+         @buy-clicked="onBuyClicked"
+         @add-cart="onAddCartClicked"/>
     <!--图片-->
     <Swipe class="images-wrapper">
       <SwipeItem v-for="item in detail.photos"
@@ -28,8 +30,7 @@
           ¥{{detail.minPrice === detail.maxPrice? `${detail.minPrice}`:`${detail.minPrice}-${detail.maxPrice}`}}
         </template>
       </Cell>
-      <Cell :border="false" center
-            :title="detail.title" label="描述信息"></Cell>
+      <Cell :border="false" center :title="detail.title" label="描述信息"></Cell>
     </CellGroup>
 
     <CellGroup class="margin-bottom20"
@@ -39,15 +40,14 @@
 
     <CellGroup class="margin-bottom20"
                :border="false">
-      <Cell title="选择" is-link value="型号"/>
+      <Cell title="选择" is-link value="型号" @click="onClickChooseSku"/>
     </CellGroup>
 
     <GoodsAction>
-      <GoodsActionIcon icon="chat-o" text="客服"
-                       @click="onClickLink"/>
+      <GoodsActionIcon icon="chat-o" text="客服" @click="onClickLink"/>
       <GoodsActionIcon icon="cart-o" text="购物车" @click="onClickShopCart"/>
       <GoodsActionButton type="warning" text="加入购物车" @click="onClickAddShopChart"/>
-      <GoodsActionButton type="danger" text="立即购买" @click="onClickAddShopChart"/>
+      <GoodsActionButton type="danger" text="立即购买" @click="onClickBuy"/>
     </GoodsAction>
   </div>
 </template>
@@ -66,11 +66,13 @@
   } from 'vant';
   import * as models from '@/store/models-types'
   import {mapActions, mapState} from 'vuex'
+  import * as actions from "@/store/actions-types";
+  import Goto from "@/utils/Goto";
 
   export default {
     components: {
       GoodsAction, GoodsActionIcon, GoodsActionButton,
-      VanImage, Swipe, SwipeItem, Cell, CellGroup, Sku
+      VanImage, Swipe, SwipeItem, Cell, CellGroup, Sku,
     },
     data() {
       return {
@@ -143,19 +145,61 @@
     },
     methods: {
       ...mapActions(models.PRODUCT, {
-        getProduct: 'getProduct',
+        getProduct: actions.GET_PRODUCT,
       }),
-      onClickLink() {
-
-      },
-      onClickShopCart() {
-      },
-      onClickAddShopChart() {
+      ...mapActions(models.ME, {
+        addMyShoppingCart: actions.ADD_MY_SHOPPING_CART,
+      }),
+      onClickChooseSku() {
         this.visibleSku = true;
       },
-      onSubmit(values) {
-        console.log('登录', values);
+      // [商品详情]客服
+      onClickLink() {
       },
+      // [商品详情]购物车
+      onClickShopCart() {
+        Goto.shoppingCart();
+      },
+      // [商品详情]立即购买
+      onClickBuy() {
+        let {sku = []} = this.detail;
+        if (sku.length === 1) {
+          let {id} = sku[0];
+          this._buyGoods(id, 1);
+          return;
+        }
+        this.visibleSku = true;
+      },
+      // [商品详情]加入购物车
+      onClickAddShopChart() {
+        let {sku = []} = this.detail;
+        if (sku.length === 1) {
+          let {id} = sku[0];
+          this._addMyShoppingCart(id, 1)
+          return;
+        }
+        this.visibleSku = true;
+      },
+      // [选择SKU]立即购买
+      onBuyClicked({selectedNum, selectedSkuComb: {id}}) {
+        this._buyGoods(id, selectedNum);
+      },
+      // [选择SKU]添加购物车
+      onAddCartClicked({selectedNum, selectedSkuComb: {id}}) {
+        this._addMyShoppingCart(id, selectedNum);
+      },
+      _addMyShoppingCart(skuId, quantity) {
+        this.addMyShoppingCart({
+          payload: {skuId: skuId, quantity: quantity},
+          callback: () => {
+            this.$notify({type: 'success', message: '添加成功'});
+            this.visibleSku = false;
+          }
+        })
+      },
+      _buyGoods(skuId, quantity) {
+        Goto.confirmOrder([{skuId, quantity}]);
+      }
     }
   }
 </script>

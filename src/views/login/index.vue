@@ -6,10 +6,12 @@
     </div>
     <CellGroup>
       <Field v-model="username"
+             name="username"
              label="账号"
              placeholder="请输入账号"
              :rules="[{ required: true, message: '请填写账号' }]"/>
       <Field v-model="password"
+             name="password"
              label="密码"
              type="password"
              placeholder="请输入密码"
@@ -23,9 +25,10 @@
 
 <script>
   import {Button, CellGroup, Field, Form, Image as VanImage} from 'vant';
-  import {createNamespacedHelpers} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
+  import * as models from '@/store/models-types'
+  import * as actions from "@/store/actions-types";
 
-  const {mapActions, mapState} = createNamespacedHelpers('apps')
   export default {
     components: {
       Field, CellGroup, Button, Form, VanImage
@@ -37,19 +40,21 @@
       }
     },
     computed: {
-      ...mapState(['data']),
+      ...mapState(models.APPS, {}),
     },
     watch: {},
     methods: {
-      onSubmit(values) {
-        console.log('登录', values);
+      ...mapActions(models.APPS, {
+        login: actions.LOGIN,
+      }),
+      onSubmit({password, username}) {
+        this.login({
+          payload: {
+            username: username,
+            password: password
+          }
+        });
       },
-      ...mapActions(['requestUrl']),
-      async onClick() {
-        console.log('点击', mapActions(['requestUrl']))
-        let a = await this.requestUrl({sd: "sd"});
-        console.log('sd', a, this.$store.state['apps'].data)
-      }
     }
   }
 </script>
