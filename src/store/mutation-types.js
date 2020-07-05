@@ -1,0 +1,3 @@
+// = 商品
+export const SET_PRODUCT_PAGING = 'SET_PRODUCT_LIST';
+export const SET_PRODUCT_DETAIL = 'SET_PRODUCT_DETAIL';

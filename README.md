@@ -1,4 +1,7 @@
 # eagle-mall
+> [Vue-Cli](https://cli.vuejs.org/zh/guide/creating-a-project.html)
+> [Vuex](https://vuex.vuejs.org/zh/guide/)
+> [Vue-Router](https://router.vuejs.org/)
 
 ## Project setup
 ```
