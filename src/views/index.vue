@@ -1,20 +1,17 @@
 <template>
   <div class="container">
-    <Tabbar v-model="active" @change="onTabChange">
-      <TabbarItem icon="home-o">首页</TabbarItem>
-      <TabbarItem icon="shop-o">分类</TabbarItem>
-      <TabbarItem name="shopping-cart" icon="shopping-cart-o">购物车</TabbarItem>
-      <TabbarItem icon="user-o">个人中心</TabbarItem>
-    </Tabbar>
+    <Toolbar>
+      <template #title>title</template>
+    </Toolbar>
   </div>
 </template>
 
 <script>
-  import {Tabbar, TabbarItem} from 'vant';
+  import Toolbar from '@/components/Toolbar'
   import Goto from "@/utils/Goto";
 
   export default {
-    components: {Tabbar, TabbarItem},
+    components: {Toolbar},
     data() {
       return {
         active: 'shopping-cart'

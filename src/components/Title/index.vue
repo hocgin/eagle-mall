@@ -1,5 +1,5 @@
 <template>
-  <h2 class="title">{{ title }}</h2>
+  <h2 class="title">{{ title }} {{this.$slots.default}}</h2>
 </template>
 
 <script>

@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <Toolbar>
+      <template #title>支付订单</template>
+    </Toolbar>
     <div class="payment-card">
       <div style="color: #ABACAD; font-size: 14px">需付款</div>
       <div class="payment-title">¥<span style="font-size: 28px;">{{formatMoney(totalFee)}}</span></div>
@@ -23,6 +26,7 @@
 </template>
 
 <script>
+  import Toolbar from '@/components/Toolbar'
   import {mapActions} from "vuex";
   import {Button, CountDown} from 'vant';
   import * as models from "@/store/models-types";
@@ -30,7 +34,7 @@
   import {Util} from "@/utils/util";
 
   export default {
-    components: {CountDown, Button},
+    components: {CountDown, Toolbar, Button},
     data() {
       return {
         paymentWay: 1,
@@ -62,7 +66,7 @@
       formatMoney: Util.money,
       onSubmit() {
         let callback = ({data}) => {
-          console.log('登录', data);
+          console.log('调用支付软件', data);
         };
         this.payTrade({
           payload: {
@@ -78,15 +82,15 @@
 
 <style scoped>
   .container {
-    padding: 0 10px;
     box-sizing: border-box;
     background-color: #F7F8FA;
-    min-height: 100vh;
+    height: 100%;
   }
 
   .payment-card {
+    margin-top: 10px;
     text-align: center;
-    padding: 30px 0;
+    padding: 30px 10px;
     border-radius: 15px;
     background-color: #fff;
   }

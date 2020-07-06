@@ -1,5 +1,8 @@
 <template>
   <div>
+    <Toolbar>
+      <template #title>确认订单</template>
+    </Toolbar>
     <div class="confirm-container">
       <Title title="收货地址"/>
       <AddressCard v-if="address"
@@ -33,6 +36,7 @@
 </template>
 
 <script>
+  import Toolbar from '@/components/Toolbar'
   import ProductCard from '@/components/ProductCard2'
   import AddressCard from '@/components/AddressCard'
   import ChooseAddressCard from '@/components/ChooseAddressCard'
@@ -46,7 +50,7 @@
   import Goto from "@/utils/Goto";
 
   export default {
-    components: {ProductCard, ChooseAddressCard, Title, CouponCell, CouponList, Popup, SubmitBar, AddressCard},
+    components: {Toolbar, ProductCard, ChooseAddressCard, Title, CouponCell, CouponList, Popup, SubmitBar, AddressCard},
     data() {
       return {
         address: null,
@@ -116,6 +120,5 @@
     padding: 0 10px;
     box-sizing: border-box;
     background-color: #F7F8FA;
-    min-height: 100vh;
   }
 </style>

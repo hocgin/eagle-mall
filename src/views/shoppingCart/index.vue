@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="container">
-      <Form @submit="onSubmit">
+  <div class="container">
+    <Form @submit="onSubmit" style="height: 100%">
+      <div class="card-wrapper">
         <List @load="onLoad"
               :finished="finished"
               v-model="loading">
@@ -13,10 +13,10 @@
                        :price="formatMoney(item.price)"
                        v-bind:key="item.id"/>
         </List>
-        <SubmitBar :disabled="totalAmount === null"
-                   :price="totalAmount" button-text="结算" native-type="submit"/>
-      </Form>
-    </div>
+      </div>
+      <SubmitBar :disabled="disabledSubmit"
+                 :price="totalAmount" button-text="结算" native-type="submit"/>
+    </Form>
   </div>
 </template>
 
@@ -36,7 +36,8 @@
         loading: false,
         finished: false,
         shoppingCart: [],
-        totalAmount: null,
+        disabledSubmit: true,
+        totalAmount: 0,
         list: []
       }
     },
@@ -110,6 +111,7 @@
         });
       },
       _calcOrder(values = []) {
+        this.disabledSubmit = values.length <= 0;
         if (values.length === 0) {
           this.totalAmount = null;
           return;
@@ -143,10 +145,19 @@
 </script>
 <style scoped>
   .container {
-    padding: 0 10px;
     box-sizing: border-box;
     background-color: #F7F8FA;
-    min-height: 100vh;
+    height: 100%;
+  }
+
+  .card-wrapper {
+    height: 100%;
+    padding: 0 10px;
+    overflow: scroll;
+  }
+
+  .van-submit-bar {
+    position: absolute;
   }
 
 </style>
