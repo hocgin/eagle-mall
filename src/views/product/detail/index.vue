@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <!-- SKU 规格-->
     <Sku v-model="visibleSku"
          :sku="sku"

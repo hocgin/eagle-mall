@@ -1,9 +1,11 @@
 <template>
-  <div>
+  <div :class="themeClass">
     <NavBar :title="title"
             :left-arrow="leftArrow" @click-left="onClickLeft" @click-right="onClickRight">
       <template #title>
-        <slot name="title"></slot>
+        <div class="title">
+          <slot name="title"></slot>
+        </div>
       </template>
       <template #right>
         <slot name="right"></slot>
@@ -21,15 +23,25 @@
   export default {
     components: {NavBar},
     data() {
-      return {}
+      return {
+        themeClass: null
+      }
     },
     mounted() {
+      if (this.theme === 'blue') {
+        this.themeClass = 'blue';
+      }
     },
     props: {
       title: {
         type: String,
         required: false,
-        default: ''
+        default: 'default'
+      },
+      theme: {
+        type: String,
+        required: false,
+        default: 'white'
       },
       leftArrow: {
         type: Boolean,
@@ -55,6 +67,22 @@
     methods: {}
   }
 </script>
-<style scoped>
+<style scoped lang="less">
+  @import "src/global.less";
 
+  .blue {
+    .van-nav-bar {
+      background-color: #3A84EF;
+      color: #fff !important;
+
+      .title {
+        color: #fff !important;
+      }
+    }
+
+
+    .van-hairline--bottom::after {
+      border-width: 0;
+    }
+  }
 </style>

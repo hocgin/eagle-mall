@@ -50,7 +50,7 @@ const router = new VueRouter({
     }, {
       path: '/user',
       name: 'user',
-      component: () => import('@/views/index'),
+      component: () => import('@/views/user/index'),
       meta: {title: '个人中心'}
     }, {
       path: '/classify',

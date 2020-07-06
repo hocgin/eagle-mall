@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <Toolbar>
       <template #title>确认订单</template>
     </Toolbar>
@@ -120,5 +120,6 @@
     padding: 0 10px;
     box-sizing: border-box;
     background-color: #F7F8FA;
+    height: 100%;
   }
 </style>

@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <Form @submit="onSubmit" style="height: 100%">
+    <Toolbar :left-arrow="false">
+      <template #title>我的购物车</template>
+    </Toolbar>
+    <Form @submit="onSubmit" style="height: 100%; margin-top: 10px">
       <div class="card-wrapper">
         <List @load="onLoad"
               :finished="finished"
@@ -21,6 +24,7 @@
 </template>
 
 <script>
+  import Toolbar from '@/components/Toolbar'
   import {Form, List, SubmitBar} from 'vant';
   import {Util} from "@/utils/util";
   import {mapActions, mapState} from "vuex";
@@ -30,7 +34,7 @@
   import Goto from "@/utils/Goto";
 
   export default {
-    components: {ProductCard, SubmitBar, List, Form},
+    components: {ProductCard, SubmitBar, List, Form, Toolbar},
     data() {
       return {
         loading: false,
