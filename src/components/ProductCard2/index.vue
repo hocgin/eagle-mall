@@ -8,6 +8,9 @@
             :desc="desc"
             :price="price"
             :thumb="thumb">
+        <template #footer>
+          <slot name="footer"></slot>
+        </template>
       </Card>
     </template>
   </Cell>

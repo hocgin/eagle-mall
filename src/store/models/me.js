@@ -90,8 +90,32 @@ export default {
         Toast.fail(result.message);
       }
     },
+    async [actions.CREATE_REFUND_APPLY](_, {payload, callback}) {
+      let result = await order.createRefundApply(payload);
+      if (result.success) {
+        if (callback) callback(result);
+      } else {
+        Toast.fail(result.message);
+      }
+    },
     async [actions.CREATE_ORDER](_, {payload, callback}) {
       let result = await order.createMyOrder(payload);
+      if (result.success) {
+        if (callback) callback(result);
+      } else {
+        Toast.fail(result.message);
+      }
+    },
+    async [actions.CONFIRM_MY_ORDER](_, {payload, callback}) {
+      let result = await order.confirmMyOrder(payload);
+      if (result.success) {
+        if (callback) callback(result);
+      } else {
+        Toast.fail(result.message);
+      }
+    },
+    async [actions.CANCEL_MY_ORDER](_, {payload, callback}) {
+      let result = await order.cancelMyOrder(payload);
       if (result.success) {
         if (callback) callback(result);
       } else {
@@ -125,6 +149,14 @@ export default {
     },
     async [actions.PAGING_MY_ORDER](_, {payload, callback}) {
       let result = await order.pagingMyOrder(payload);
+      if (result.success) {
+        if (callback) callback(result);
+      } else {
+        Toast.fail(result.message);
+      }
+    },
+    async [actions.GET_MY_ORDER](_, {payload, callback}) {
+      let result = await order.getMyOrder(payload);
       if (result.success) {
         if (callback) callback(result);
       } else {

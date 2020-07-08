@@ -32,10 +32,20 @@ const router = new VueRouter({
         component: () => import('@/views/order/confirm/index'),
         meta: {title: '确认订单'}
       }, {
+        path: '/user/order/:id',
+        name: 'order-detail',
+        component: () => import('@/views/order/detail/index'),
+        meta: {title: '订单详情'}
+      }, {
         path: '/order/payment',
         name: 'order-payment',
         component: () => import('@/views/order/payment/index'),
         meta: {title: '支付订单'}
+      }, {
+        path: '/user/refund/:id',
+        name: 'user-refund',
+        component: () => import('@/views/order/refundApply/index'),
+        meta: {title: '退款申请'}
       }, {
         path: '/user/order',
         name: 'user-order',
@@ -86,7 +96,7 @@ const router = new VueRouter({
       }, {
         path: '/classify',
         name: 'classify',
-        component: () => import('@/views/index'),
+        component: () => import('@/views/search/index'),
         meta: {title: '分类'}
       }]
     }]

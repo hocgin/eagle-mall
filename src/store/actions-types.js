@@ -18,6 +18,13 @@ export const GET_COUNTY = 'getCounty';
 
 // = 创建订单
 export const CREATE_ORDER = 'createOrder';
+export const CONFIRM_MY_ORDER = 'confirmMyOrder';
+// = 分页查询我的订单列表
+export const PAGING_MY_ORDER = 'pagingMyOrder';
+export const GET_MY_ORDER = 'getMyOrder';
+export const CANCEL_MY_ORDER = 'cancelMyOrder';
+// = 退款申请
+export const CREATE_REFUND_APPLY = 'createRefundApply';
 // = 订单估价
 export const CALC_ORDER = 'calcOrder';
 // = 交易单
@@ -27,8 +34,6 @@ export const PAY_TRADE = 'payTrade';
 export const LOGIN = 'login';
 // = 获取用户信息
 export const GET_USER_INFO = 'getUserInfo';
-// = 分页查询我的订单列表
-export const PAGING_MY_ORDER = 'pagingMyOrder';
 
 
 export const GET_AVATAR_URL = 'getAvatarUrl';

@@ -3,12 +3,16 @@
     <CellGroup>
       <Cell icon="orders-o" :title="orderSn" :value="statusName"/>
       <ProductCard v-for="item in list"
-                   v-bind:num.sync="item.productQuantity"
+                   :num="item.productQuantity"
                    :thumb="item.productPic || '404'"
                    :title="item.productName"
                    :spec="item.spec"
                    :price="formatMoney(item.productPrice)"
-                   v-bind:key="item.id"/>
+                   v-bind:key="item.id">
+        <template #footer v-if="item.refundStatusName != null">
+          <span class="refund-status">退款状态: {{item.refundStatusName}}</span>
+        </template>
+      </ProductCard>
       <div class="money-bar">
         <span class="small-money">总价 <Money unit="¥" :text="formatMoney(totalAmount)"/>,</span>
         <span class="small-money" v-if="discountTotalAmount != null">优惠 <Money unit="¥"
@@ -123,5 +127,9 @@
     .btn-group > button {
       margin: 0 2px;
     }
+  }
+
+  .refund-status {
+    color: #C69470;
   }
 </style>

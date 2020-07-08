@@ -26,12 +26,21 @@
         default: null
       },
     },
-    mounted() {
-      let strings = `${this.text}`.split('.');
-      this.text1 = strings[0] ?? '0';
-      this.text2 = strings[1] ?? '00';
+    watch:{
+      text(text){
+        this._text(text);
+      }
     },
-    methods: {}
+    mounted() {
+      this._text(this.text);
+    },
+    methods: {
+      _text(text) {
+        let strings = `${text}`.split('.');
+        this.text1 = strings[0] ?? '0';
+        this.text2 = strings[1] ?? '00';
+      }
+    }
   }
 </script>
 <style scoped lang="less">

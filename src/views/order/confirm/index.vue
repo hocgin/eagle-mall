@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div class="container">
     <Toolbar>
       <template #title>确认订单</template>
     </Toolbar>
@@ -180,11 +180,19 @@
     }
   }
 </script>
-<style scoped>
+<style scoped lang="less">
+  @import "src/global.less";
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    background-color: @backgroundColor;
+    height: 100%;
+  }
+
   .confirm-container {
     padding: 0 10px;
     box-sizing: border-box;
-    background-color: #F7F8FA;
-    height: 100%;
+    flex: 1 1;
   }
 </style>

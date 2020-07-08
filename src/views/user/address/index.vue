@@ -3,11 +3,13 @@
     <Toolbar>
       <template #title>我的收货地址</template>
     </Toolbar>
-    <AddressList :list="addressList"
-                 @add="onClickAddAddress"
-                 @edit="onClickEditAddress"
-                 default-tag-text="默认"
-                 :switchable="false"/>
+    <div class="page">
+      <AddressList :list="addressList"
+                   @add="onClickAddAddress"
+                   @edit="onClickEditAddress"
+                   default-tag-text="默认"
+                   :switchable="false"/>
+    </div>
   </div>
 </template>
 <script>
@@ -59,7 +61,13 @@
   @import "src/global.less";
 
   .container {
+    display: flex;
+    flex-direction: column;
     background-color: @backgroundColor;
     height: 100%;
+  }
+
+  .page {
+    flex: 1 1;
   }
 </style>

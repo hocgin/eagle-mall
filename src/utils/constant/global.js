@@ -16,6 +16,14 @@ export const Global = {
 };
 
 export const Urls = {
+  // 退款申请
+  getRefundApplyPage: (itemId) => `/user/refund/${itemId}`,
+  // 去支付
+  getPaymentPage: (tradeSn) => `/order/payment?tradeSn=${tradeSn}`,
+  //订单详情
+  getOrderUrl: (id) => `/user/order/${id}`,
+  //商品详情
+  getProductPage: (id) => `/product/${id}`,
   // 收货地址
   getAddressPage: () => '/user/address',
   // 新增收货地址
@@ -42,6 +50,10 @@ export const OrderTabs = {
   Shipped: {
     name: '待收货',
     value: 2,
+  },
+  Completed: {
+    name: '已完成',
+    value: 3,
   },
 };
 

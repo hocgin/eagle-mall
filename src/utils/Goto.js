@@ -48,6 +48,16 @@ export default class Goto {
     });
   }
 
+
+  /**
+   * 我的订单
+   */
+  static myOrder() {
+    router.push({
+      path: Urls.getMyOrderPage(),
+    });
+  }
+
   /**
    * 添加收货地址
    */
