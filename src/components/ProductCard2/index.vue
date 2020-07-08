@@ -46,7 +46,7 @@
       },
       originprice: {
         type: String,
-        required: true
+        required: false
       },
       spec: {
         type: Array,

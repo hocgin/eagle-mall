@@ -24,12 +24,16 @@
         active: null
       }
     },
+    mounted() {
+    },
+    watch: {
+      $route() {
+        document.title = this.$route?.meta?.title;
+      }
+    },
     methods: {
       onTabChange(value) {
         router.push(value)
-      },
-      onSubmit(values) {
-        console.log('登录', values);
       },
     }
   };

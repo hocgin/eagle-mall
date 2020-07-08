@@ -5,11 +5,13 @@
     </Toolbar>
     <div class="confirm-container">
       <Title title="收货地址"/>
-      <AddressCard v-if="address"
-                   :name="address.name"
-                   :address="address.address"
-                   :phone="address.phone"/>
-      <ChooseAddressCard v-else/>
+      <div @click="visibleChooseAddress = true">
+        <AddressCard v-if="address"
+                     :name="address.name"
+                     :address="address.address"
+                     :phone="address.phone"/>
+        <ChooseAddressCard v-else/>
+      </div>
       <Title title="订单信息"/>
       <ProductCard v-for="item in list"
                    v-bind:checked.sync="item.checked"
@@ -32,6 +34,17 @@
       <CouponList :show-close-button="false"
                   :show-exchange-bar="false"/>
     </Popup>
+    <Popup v-model="visibleChooseAddress"
+           round
+           position="bottom"
+           style="height: 90%; padding-top: 4px;">
+      <AddressList v-model="selectedAddressId"
+                   :list="addressList"
+                   default-tag-text="默认"
+                   @add="onClickAddAddress"
+                   @edit="onClickEditAddress"
+                   @select="onSelectAddress"/>
+    </Popup>
   </div>
 </template>
 
@@ -41,8 +54,8 @@
   import AddressCard from '@/components/AddressCard'
   import ChooseAddressCard from '@/components/ChooseAddressCard'
   import Title from '@/components/Title'
-  import {CouponCell, CouponList, Popup, SubmitBar} from 'vant';
-  import {mapActions} from "vuex";
+  import {AddressList, CouponCell, CouponList, Popup, SubmitBar} from 'vant';
+  import {mapActions, mapState} from "vuex";
   import * as models from "@/store/models-types";
   import * as actions from "@/store/actions-types";
   import Global from "@/utils/constant/global";
@@ -50,29 +63,75 @@
   import Goto from "@/utils/Goto";
 
   export default {
-    components: {Toolbar, ProductCard, ChooseAddressCard, Title, CouponCell, CouponList, Popup, SubmitBar, AddressCard},
+    components: {
+      Toolbar,
+      AddressList,
+      ProductCard,
+      ChooseAddressCard,
+      Title,
+      CouponCell,
+      CouponList,
+      Popup,
+      SubmitBar,
+      AddressCard
+    },
     data() {
       return {
+        selectedAddressId: null,
         address: null,
         list: [],
         totalAmount: null,
         visibleCoupon: false,
+        visibleChooseAddress: false,
       }
     },
-    computed: {},
+    computed: {
+      ...mapState(models.ME, {
+        addressList: (state) => (state.addressPaging?.records ?? []).map((item) => ({
+          ...item,
+          id: item.id,
+          name: item.name,
+          tel: item.phone,
+          address: `${item.province} ${item.city} ${item.region} ${item.detailAddress}`,
+          isDefault: item.isDefault === 1,
+        })),
+      }),
+    },
     mounted() {
+      this._getAddressList();
       let {items} = this.$route.query;
       this.items = JSON.parse(items);
       this._calcOrder(this.items);
+    },
+    watch: {
+      address({id}) {
+        this.selectedAddressId = id;
+      }
     },
     methods: {
       ...mapActions(models.APPS, {
         calcOrder: actions.CALC_ORDER
       }),
       ...mapActions(models.ME, {
-        createMyOrder: actions.CREATE_ORDER
+        createMyOrder: actions.CREATE_ORDER,
+        pagingMyAddress: actions.PAGING_MY_ADDRESS
       }),
       formatMoney: Util.money,
+      onClickAddAddress() {
+        Goto.addAddress();
+      },
+      onClickEditAddress({id}) {
+        Goto.editAddress(id);
+      },
+      onSelectAddress(item) {
+        this.address = {
+          id: item.id,
+          name: item.name,
+          phone: item.phone,
+          address: `${item.province} ${item.city} ${item.region} ${item.detailAddress}`,
+        };
+        this.visibleChooseAddress = false;
+      },
       onSubmit() {
         this.createMyOrder({
           payload: {
@@ -87,6 +146,9 @@
           }
         });
       },
+      _getAddressList() {
+        this.pagingMyAddress({payload: {page: 1, size: 10000}});
+      },
       _calcOrder(values = []) {
         if (values.length === 0) {
           this.totalAmount = null;
@@ -96,13 +158,16 @@
         let callback = ({data}) => {
           this.list = (data?.items || []);
           this.totalAmount = (data?.totalAmount * 100);
-          let defaultAddress = data.defaultAddress;
-          this.address = defaultAddress ? {
-            id: defaultAddress.id,
-            name: defaultAddress.name,
-            phone: defaultAddress.phone,
-            address: `${defaultAddress.province} ${defaultAddress.city} ${defaultAddress.region} ${defaultAddress.detailAddress}`,
-          } : null;
+          if (this.address === null) {
+            let defaultAddress = data.defaultAddress;
+            this.address = defaultAddress ? {
+              id: defaultAddress.id,
+              name: defaultAddress.name,
+              phone: defaultAddress.phone,
+              address: `${defaultAddress.province} ${defaultAddress.city} ${defaultAddress.region} ${defaultAddress.detailAddress}`,
+            } : null;
+          }
+
         };
 
         this.calcOrder({

@@ -1,23 +1,22 @@
 <template>
-  <div class="container">
-
+  <div>
+    订单详情
   </div>
 </template>
 <script>
-
   export default {
     components: {},
     data() {
-      return {
-        selectedAddressId: null
-      }
+      return {}
     },
     computed: {},
     watch: {},
     methods: {
+      onSubmit(values) {
+        console.log('登录', values);
+      },
     }
   }
 </script>
-<style scoped lang="less">
-  @import "src/global.less";
+<style scoped>
 </style>

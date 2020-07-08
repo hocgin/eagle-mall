@@ -1,4 +1,4 @@
-import Global from "@/utils/constant/global";
+import Global, {Urls} from "@/utils/constant/global";
 import router from "@/router";
 
 export default class Goto {
@@ -46,5 +46,28 @@ export default class Goto {
         tradeSn: tradeSn
       }
     });
+  }
+
+  /**
+   * 添加收货地址
+   */
+  static addAddress() {
+    router.push({
+      path: Urls.addAddressPage(),
+    });
+  }
+
+  /**
+   * 修改收货地址
+   * @param id
+   */
+  static editAddress(id) {
+    router.push({
+      path: Urls.updateAddressPage(id),
+    });
+  }
+
+  static back(v = -1) {
+    router.go(v);
   }
 }

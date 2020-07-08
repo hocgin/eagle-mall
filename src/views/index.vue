@@ -33,26 +33,17 @@
 <script>
   import Toolbar from '@/components/Toolbar'
   import {Grid, GridItem, Search, Swipe, SwipeItem} from 'vant';
-  import Goto from "@/utils/Goto";
   import Title from '@/components/Title'
 
   export default {
     components: {Toolbar, Search, Swipe, SwipeItem, Title, Grid, GridItem},
     data() {
       return {
-        active: 'shopping-cart'
       }
     },
     computed: {},
     watch: {},
     methods: {
-      onTabChange(value) {
-        let maps = {
-          ['shopping-cart']: Goto.shoppingCart
-        };
-        let goto = maps[value];
-        if (goto) goto();
-      },
       onSubmit(values) {
         console.log('登录', values);
       },
