@@ -10,7 +10,7 @@ export default {
     detail: {},
   },
   actions: {
-    async paging({commit}, {payload, callback}) {
+    async [actions.PAGING_PRODUCT]({commit}, {payload, callback}) {
       let result = await product.paging(payload);
       if (result.success) {
         commit(types.SET_PRODUCT_PAGING, result.data)

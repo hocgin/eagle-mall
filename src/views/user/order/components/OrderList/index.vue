@@ -67,7 +67,7 @@
         }
 
         this.isRefresh = true;
-        this._pagingMyOrder(1, 10, ({data: {records = []}}) => {
+        this._pagingMyOrder(1, this.size, ({data: {records = []}}) => {
           this.list = [...records];
           this.isRefresh = false;
         });

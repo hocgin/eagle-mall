@@ -165,7 +165,6 @@
         });
       },
       _updateMyShoppingCart(skuId, quantity) {
-        console.log('加载xx', skuId, quantity);
         if (quantity <= 0) {
           this.deleteMyShoppingCart({payload: {id: skuId}});
           this.onLoad();

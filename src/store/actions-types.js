@@ -1,4 +1,5 @@
 // = 商品
+export const PAGING_PRODUCT = 'pagingProduct';
 export const GET_PRODUCT = 'getProduct';
 // = 购物车
 export const ADD_MY_SHOPPING_CART = 'addMyShoppingCart';
