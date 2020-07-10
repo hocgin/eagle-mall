@@ -1,10 +1,19 @@
 <template>
   <div class="container">
-    <Toolbar :left-arrow="false">
+    <Toolbar :left-arrow="true">
       <template #title>
-        商品搜索列表
+        <Search v-model="keyword"
+                autofocus
+                clearable
+                shape
+                @search="onSearch"
+                placeholder="请输入搜索关键词"/>
       </template>
     </Toolbar>
+    <DropdownMenu>
+      <DropdownItem v-model="menus.name11.selected" :options="menus.name11.options"/>
+      <DropdownItem v-model="menus.name22.selected" :options="menus.name22.options"/>
+    </DropdownMenu>
     <div class="result-wrapper">
       <PullRefresh style="height: 100%"
                    v-model="isRefresh"
@@ -34,15 +43,15 @@
 
 <script>
   import Toolbar from '@/components/Toolbar'
-  import {Card, Empty, List, PullRefresh, Tag, Toast} from 'vant';
+  import {Card, DropdownItem, DropdownMenu, Empty, List, PullRefresh, Search, Tag, Toast} from 'vant';
   import * as models from '@/store/models-types'
   import * as actions from '@/store/actions-types'
-  import {mapActions, mapState} from 'vuex'
+  import {mapActions} from 'vuex'
   import {Util} from "@/utils/util";
   import {Urls} from "@/utils/constant/global";
 
   export default {
-    components: {Card, List, Tag, Toolbar, PullRefresh, Empty},
+    components: {Card, List, Tag, Toolbar, PullRefresh, Empty, Search, DropdownMenu, DropdownItem},
     data() {
       return {
         isRefresh: false,
@@ -50,17 +59,35 @@
         isFinished: false,
         page: 1,
         size: 10,
+        keyword: null,
         list: [],
+        menus: {
+          name11: {
+            selected: 0,
+            options: [{
+              text: '全部商品',
+              value: 0
+            }, {
+              text: '新款商品',
+              value: 1
+            }]
+          },
+          name22: {
+            selected: 0,
+            options: [{
+              text: '默认排序',
+              value: 0
+            }, {
+              text: '好评排序',
+              value: 1
+            }]
+          }
+        }
       }
     },
-    created() {
+    mounted() {
+      this.onRefresh();
     },
-    computed: {
-      ...mapState(models.PRODUCT, {
-        // list: (state) => state.paging
-      }),
-    },
-    watch: {},
     methods: {
       ...mapActions(models.PRODUCT, {
         pagingProduct: actions.PAGING_PRODUCT,
@@ -68,6 +95,9 @@
       formatMoney: Util.money,
       getProductUrl(id) {
         return Urls.getProductPage(id)
+      },
+      onSearch() {
+        this.onRefresh();
       },
       onRefresh() {
         if (this.isLoading) {
@@ -93,7 +123,7 @@
         });
       },
       _pagingProduct(page = 1, size = 10, callback) {
-        this.pagingProduct({payload: {page: page, size: size}, callback: callback});
+        this.pagingProduct({payload: {page: page, size: size, keyword: this.keyword}, callback: callback});
       }
     }
   }
@@ -105,6 +135,24 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+
+    /deep/ .van-nav-bar {
+      display: flex;
+    }
+
+    /deep/ .van-nav-bar__title {
+      flex: 1 1;
+      max-width: unset;
+      overflow: hidden;
+    }
+
+    /deep/ .van-nav-bar__left {
+      position: unset;
+    }
+
+    /deep/ .van-nav-bar__right {
+      position: unset;
+    }
   }
 
   .result-wrapper {

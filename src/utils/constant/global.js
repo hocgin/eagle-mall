@@ -16,6 +16,8 @@ export const Global = {
 };
 
 export const Urls = {
+  // 搜索页面
+  getSearchPage: () => `/search`,
   // 退款申请
   getRefundApplyPage: (itemId) => `/user/refund/${itemId}`,
   // 去支付

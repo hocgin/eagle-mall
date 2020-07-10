@@ -1,12 +1,19 @@
 <template>
   <div class="container">
     <Toolbar :left-arrow="false">
+      <template #left>
+        <Icon name="qr" size="20"/>
+      </template>
       <template #title>
-        <Search></Search>
+        <router-link :to="getSearchUrl()">
+          <Search readonly placeholder="请输入搜索关键词"/>
+        </router-link>
+      </template>
+      <template #right>
+        <Icon name="discount" size="20"/>
       </template>
     </Toolbar>
-    <Swipe class="swipe" style="margin: 10px 0"
-           :autoplay="3000"
+    <Swipe class="swipe" :autoplay="3000"
            indicator-color="white">
       <SwipeItem>1</SwipeItem>
       <SwipeItem>2</SwipeItem>
@@ -32,18 +39,21 @@
 
 <script>
   import Toolbar from '@/components/Toolbar'
-  import {Grid, GridItem, Search, Swipe, SwipeItem} from 'vant';
+  import {Grid, GridItem, Icon, Search, Swipe, SwipeItem} from 'vant';
   import Title from '@/components/Title'
+  import {Urls} from "@/utils/constant/global";
 
   export default {
-    components: {Toolbar, Search, Swipe, SwipeItem, Title, Grid, GridItem},
+    components: {Toolbar, Search, Swipe, SwipeItem, Title, Grid, GridItem, Icon},
     data() {
-      return {
-      }
+      return {}
     },
     computed: {},
     watch: {},
     methods: {
+      getSearchUrl() {
+        return Urls.getSearchPage();
+      },
       onSubmit(values) {
         console.log('登录', values);
       },
@@ -52,9 +62,22 @@
 </script>
 <style scoped="scoped" lang="less">
   .container {
-    .van-nav-bar__title {
-      margin: unset;
+    /deep/ .van-nav-bar {
+      display: flex;
+    }
+
+    /deep/ .van-nav-bar__title {
+      flex: 1 1;
+      max-width: unset;
       overflow: hidden;
+    }
+
+    /deep/ .van-nav-bar__left {
+      position: unset;
+    }
+
+    /deep/ .van-nav-bar__right {
+      position: unset;
     }
 
     .van-search {
@@ -70,4 +93,5 @@
       background-color: #39a9ed;
     }
   }
+
 </style>

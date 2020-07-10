@@ -96,7 +96,7 @@ const router = new VueRouter({
       }, {
         path: '/classify',
         name: 'classify',
-        component: () => import('@/views/search/index'),
+        component: () => import('@/views/classify/index'),
         meta: {title: '分类'}
       }]
     }]

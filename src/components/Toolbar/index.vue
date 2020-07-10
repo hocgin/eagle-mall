@@ -2,7 +2,9 @@
   <div>
     <div :class="['e-toolbar', themeClass]">
       <NavBar :title="title"
-              :left-arrow="leftArrow" @click-left="onClickLeft" @click-right="onClickRight">
+              :left-arrow="leftArrow"
+              @click-left="onSelfClickLeft"
+              @click-right="onClickRight">
         <template #title>
           <div class="title">
             <slot name="title"></slot>
@@ -27,13 +29,20 @@
     components: {NavBar},
     data() {
       return {
-        themeClass: null
+        themeClass: null,
+        onSelfClickLeft: this.onClickLeft,
       }
     },
     mounted() {
       if (this.theme === 'blue') {
         this.themeClass = 'blue';
       }
+      if (this.leftArrow === true) {
+        this.onSelfClickLeft = this.onClickLeft ?? function () {
+          router.go(-1);
+        };
+      }
+
     },
     props: {
       title: {
@@ -54,9 +63,7 @@
       onClickLeft: {
         type: Function,
         required: false,
-        default: function () {
-          router.go(-1);
-        }
+        default: null,
       },
       onClickRight: {
         type: Function,
