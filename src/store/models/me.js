@@ -2,6 +2,7 @@ import shoppingCart from '@/services/my/shoppingCart'
 import order from '@/services/my/order'
 import trade from '@/services/my/trade'
 import user from '@/services/my/user'
+import coupon from '@/services/my/coupon'
 import address from '@/services/my/address'
 import * as types from "@/store/mutation-types";
 import * as actions from '@/store/actions-types'
@@ -149,6 +150,14 @@ export default {
     },
     async [actions.PAGING_MY_ORDER](_, {payload, callback}) {
       let result = await order.pagingMyOrder(payload);
+      if (result.success) {
+        if (callback) callback(result);
+      } else {
+        Toast.fail(result.message);
+      }
+    },
+    async [actions.PAGING_MY_COUPON](_, {payload, callback}) {
+      let result = await coupon.pagingMyCoupon(payload);
       if (result.success) {
         if (callback) callback(result);
       } else {

@@ -35,6 +35,8 @@ export const PAY_TRADE = 'payTrade';
 export const LOGIN = 'login';
 // = 获取用户信息
 export const GET_USER_INFO = 'getUserInfo';
+// = 优惠券
+export const PAGING_MY_COUPON = 'pagingMyCoupon';
 
 
 export const GET_AVATAR_URL = 'getAvatarUrl';
