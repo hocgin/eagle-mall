@@ -17,6 +17,7 @@
                          :desc="item.desc"
                          :thumb="item.imageUrl"
                          :title="item.title"
+                         :thumb-link="getProductUrl(item.productId)"
                          :disabled="item.isInsufficientStock"
                          :price="formatMoney(item.price)"/>
             <template #right>
@@ -43,6 +44,7 @@
   import * as models from "@/store/models-types";
   import * as actions from "@/store/actions-types";
   import Goto from "@/utils/Goto";
+  import {Urls} from "@/utils/constant/global";
 
   export default {
     components: {ProductCard, SubmitBar, List, Form, Toolbar, PullRefresh, SwipeCell, Button, Empty},
@@ -69,10 +71,11 @@
       shoppingCartPaging: {
         handler({records = []}) {
           this.list = (records || []).map(({
-                                             id, skuId, quantity, addProductTitle, addProductPrice, addProductImageUrl,
+                                             id, productId, skuId, quantity, addProductTitle, addProductPrice, addProductImageUrl,
                                              cartItemStatus, cartItemStatusName, skuSpec
                                            }) => ({
             id: id,
+            productId: productId,
             title: addProductTitle,
             price: addProductPrice,
             imageUrl: addProductImageUrl ?? '404',
@@ -119,6 +122,9 @@
         calcOrder: actions.CALC_ORDER
       }),
       formatMoney: Util.money,
+      getProductUrl(id) {
+        return Urls.getProductPage(id)
+      },
       onLoad() {
         this.isLoading = true;
         this._queryMyShoppingCart(() => {

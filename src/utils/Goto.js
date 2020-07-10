@@ -80,4 +80,10 @@ export default class Goto {
   static back(v = -1) {
     router.go(v);
   }
+
+  static push({path}) {
+    router.push({
+      path,
+    });
+  }
 }

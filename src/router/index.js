@@ -57,6 +57,11 @@ const router = new VueRouter({
         component: () => import('@/views/user/address/index'),
         meta: {title: '我的收货地址'}
       }, {
+        path: '/user/coupon',
+        name: 'user-coupon',
+        component: () => import('@/views/user/coupon/index'),
+        meta: {title: '我的优惠券'}
+      }, {
         path: '/user/address/add',
         name: 'user-address-add',
         component: () => import('@/views/user/address/detail/index'),

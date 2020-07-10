@@ -16,6 +16,8 @@ export const Global = {
 };
 
 export const Urls = {
+  // 我的优惠券
+  getCouponPage: () => `/user/coupon`,
   // 搜索页面
   getSearchPage: () => `/search`,
   // 退款申请

@@ -35,7 +35,8 @@
       <div class="feature-list">
         <Title title="工具栏" style="margin: 0 10px"/>
         <CellGroup>
-          <Cell title="我的收货地址" :to="getAddressUrl()"></Cell>
+          <Cell icon="location-o" title="我的收货地址" :to="getAddressUrl()"></Cell>
+          <Cell icon="coupon-o" title="我的优惠券" :to="getCouponUrl()"></Cell>
         </CellGroup>
       </div>
     </div>
@@ -75,6 +76,9 @@
       }),
       getAddressUrl() {
         return Urls.getAddressPage();
+      },
+      getCouponUrl() {
+        return Urls.getCouponPage();
       },
       getTabUrl(value) {
         return Urls.getMyOrderPage({tab: value});

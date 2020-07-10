@@ -9,7 +9,8 @@
             :title="title"
             :desc="desc"
             :price="price"
-            :thumb="thumb">
+            @click-thumb="onClickThumb"
+            :thumb="thumb" replace>
         <template #num>
           <Stepper v-model="numValue"
                    :disabled="disabled"/>
@@ -20,6 +21,7 @@
 </template>
 <script>
   import {Card, Cell, Checkbox, Stepper} from 'vant'
+  import Goto from "@/utils/Goto";
 
   export default {
     components: {
@@ -45,6 +47,10 @@
         type: String,
         required: false,
         default: ""
+      },
+      thumbLink: {
+        type: String,
+        required: false,
       },
       desc: {
         type: String,
@@ -73,7 +79,13 @@
         this.$emit('update:checked', value);
       }
     },
-    methods: {},
+    methods: {
+      onClickThumb() {
+        if (this.thumbLink !== null) {
+          Goto.push({path: this.thumbLink})
+        }
+      }
+    },
     data() {
       return {
         checkedValue: false,
