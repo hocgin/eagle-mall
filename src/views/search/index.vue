@@ -25,10 +25,11 @@
               finished-text="没有更多了">
           <router-link v-for="item in list" v-bind:key="item.id"
                        :to="getProductUrl(item.id)">
-            <Card :title="item.title"
-                  desc="很懒暂未填写"
-                  :price="formatMoney(item.minPrice)"
-                  :thumb="item.mainPhotoUrl">
+            <Card class="result-card"
+              :title="item.title"
+              desc="很懒暂未填写"
+              :price="formatMoney(item.minPrice)"
+              :thumb="item.mainPhotoUrl">
               <template #tags>
                 <Tag plain type="danger">{{item.procurement}}</Tag>
               </template>
@@ -135,6 +136,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    background-color: @backgroundColor;
 
     /deep/ .van-nav-bar {
       display: flex;
@@ -160,5 +162,11 @@
     padding: 0 10px;
     overflow: scroll;
   }
+  .result-card {
+    background-color: #fff;
+    margin: 5px 0;
+    border-radius: 5px;
+  }
+
 
 </style>

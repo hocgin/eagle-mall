@@ -1,7 +1,8 @@
 <template>
   <Cell>
     <template #icon>
-      <Checkbox v-model="checkedValue"/>
+      <Checkbox v-model="checkedValue"
+                :disabled="disabled"/>
     </template>
     <template #default>
       <Card class="product-cart"
@@ -10,7 +11,8 @@
             :price="price"
             :thumb="thumb">
         <template #num>
-          <Stepper v-model="numValue"></Stepper>
+          <Stepper v-model="numValue"
+                   :disabled="disabled"/>
         </template>
       </Card>
     </template>
@@ -25,6 +27,11 @@
     },
     props: {
       checked: {
+        type: Boolean,
+        required: false,
+        default: false
+      },
+      disabled: {
         type: Boolean,
         required: false,
         default: false

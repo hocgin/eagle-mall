@@ -3,6 +3,7 @@ import hash from 'hash.js';
 import {Global} from './constant/global';
 import LocalStorage from './LocalStorage';
 import Goto from './Goto';
+import {Toast} from "vant";
 
 export default function request(
   url,
@@ -97,6 +98,7 @@ export default function request(
     })
     // 异常响应处理
     .catch((e) => {
+      Toast.fail('系统繁忙')
       console.error('[请求出现异常]', e);
     });
 }

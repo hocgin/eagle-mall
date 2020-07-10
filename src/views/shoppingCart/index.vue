@@ -14,8 +14,10 @@
                      :beforeClose="onBeforeClose">
             <ProductCard v-bind:checked.sync="item.checked"
                          v-bind:num.sync="item.quantity"
+                         :desc="item.desc"
                          :thumb="item.imageUrl"
                          :title="item.title"
+                         :disabled="item.isInsufficientStock"
                          :price="formatMoney(item.price)"/>
             <template #right>
               <Button square text="删除" type="danger"
@@ -66,12 +68,18 @@
     watch: {
       shoppingCartPaging: {
         handler({records = []}) {
-          this.list = (records || []).map(({id, skuId, quantity, addProductTitle, addProductPrice, addProductImageUrl, cartItemStatus}) => ({
+          this.list = (records || []).map(({
+                                             id, skuId, quantity, addProductTitle, addProductPrice, addProductImageUrl,
+                                             cartItemStatus, cartItemStatusName, skuSpec
+                                           }) => ({
             id: id,
             title: addProductTitle,
             price: addProductPrice,
             imageUrl: addProductImageUrl ?? '404',
+            isInsufficientStock: cartItemStatus === 2,
             status: cartItemStatus,
+            desc: `规格: ` + (skuSpec || []).map(({key, value}) => `${key}: ${value}`)
+              .reduce((str1, str2) => `${str1};${str2}`, `${cartItemStatusName}`),
             quantity: quantity,
             skuId: skuId
           }));
@@ -89,7 +97,6 @@
           if (this.shoppingCart.length !== 0) {
             for (let {skuId, quantity} of skuItems) {
               let index = this.shoppingCart.findIndex(item => (item.skuId === skuId && item.quantity === quantity));
-              console.log('update', index, index < 0, skuId, quantity);
               if (index < 0) {
                 this._updateMyShoppingCart(skuId, quantity);
               }

@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div class="back" @click="onClickBack">
+      <Icon name="arrow-left"/>
+    </div>
     <!-- SKU 规格-->
     <Sku v-model="visibleSku"
          :sku="sku"
@@ -26,7 +29,16 @@
                :border="false">
       <Cell :border="false">
         <template #title>
-          ¥{{detail.minPrice === detail.maxPrice? `${detail.minPrice}`:`${detail.minPrice}-${detail.maxPrice}`}}
+          <div class="price-row">
+            <div v-if="detail.minPrice === detail.maxPrice">
+              <Money unit="¥" :text="detail.minPrice"/>
+            </div>
+            <div v-else>
+              <Money unit="¥" :text="detail.minPrice"/>
+              -
+              <Money unit="¥" :text="detail.maxPrice"/>
+            </div>
+          </div>
         </template>
       </Cell>
       <Cell :border="false" center :title="detail.title" label="描述信息"></Cell>
@@ -58,18 +70,22 @@
     GoodsAction,
     GoodsActionButton,
     GoodsActionIcon,
+    Icon,
     Image as VanImage,
     Sku,
     Swipe,
     SwipeItem
   } from 'vant';
+  import Money from '@/components/Money'
   import * as models from '@/store/models-types'
   import {mapActions, mapState} from 'vuex'
   import * as actions from "@/store/actions-types";
   import Goto from "@/utils/Goto";
+  import {Util} from "@/utils/util";
 
   export default {
     components: {
+      Icon, Money,
       GoodsAction, GoodsActionIcon, GoodsActionButton,
       VanImage, Swipe, SwipeItem, Cell, CellGroup, Sku,
     },
@@ -114,13 +130,14 @@
             skuList.push(skuItem);
           }
 
+          console.log('skuMap', skuMap);
           let skuMapKeys = Object.keys(skuMap);
           for (let i = 0; i < skuMapKeys.length; i++) {
             let key = skuMapKeys[i];
             skuTree.push({
               k: key,
               k_s: `s${i + 1}`,
-              v: [...(skuMap[key] || []).map((value) => ({
+              v: [...Util.distinct(skuMap[key] || []).map(value => ({
                 id: value,
                 name: value
               }))],
@@ -135,6 +152,7 @@
             stock_num: 1000,
             price: minPrice * 100,
           };
+          console.log('sku', this.sku);
           this.goods = {
             picture: mainPhotoUrl
           };
@@ -149,6 +167,9 @@
       ...mapActions(models.ME, {
         addMyShoppingCart: actions.ADD_MY_SHOPPING_CART,
       }),
+      onClickBack() {
+        Goto.back();
+      },
       onClickChooseSku() {
         this.visibleSku = true;
       },
@@ -202,11 +223,26 @@
     }
   }
 </script>
-<style scoped>
+<style scoped lang="less">
+  @import "src/global.less";
+
   .container {
-    background-color: rgba(242, 242, 242, 0.6);
+    background-color: @backgroundColor;
     min-height: 100vh;
     margin-bottom: 30px;
+
+    .back {
+      color: #fff;
+      position: fixed;
+      margin: 10px;
+      padding: 8px;
+      z-index: 1000;
+      border-radius: 50%;
+      background-color: rgba(158, 161, 167, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   .images-wrapper {
@@ -224,5 +260,14 @@
     padding: 2px 5px;
     font-size: 12px;
     background: rgba(0, 0, 0, 0.1);
+  }
+
+  .price-row {
+    color: #DD7156;
+
+    /deep/ .text1 {
+      font-weight: 400;
+      font-size: 20px;
+    }
   }
 </style>

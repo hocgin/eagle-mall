@@ -30,7 +30,9 @@
     data() {
       return {
         themeClass: null,
-        onSelfClickLeft: this.onClickLeft,
+        onSelfClickLeft: this.onClickLeft || function () {
+
+        },
       }
     },
     mounted() {
@@ -63,7 +65,6 @@
       onClickLeft: {
         type: Function,
         required: false,
-        default: null,
       },
       onClickRight: {
         type: Function,
