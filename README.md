@@ -1,27 +1,33 @@
-# eagle-mall
-> [Vue-Cli](https://cli.vuejs.org/zh/guide/creating-a-project.html)
-> [Vuex](https://vuex.vuejs.org/zh/guide/)
-> [Vue-Router](https://router.vuejs.org/)
+## EAGLE
+> STATUS: Development
+- [Eagle UI](https://github.com/hocgin/eagle-ui)
+- [Eagle Mall](https://github.com/hocgin/eagle-mall)
+- [Eagle](https://github.com/hocgin/eagle)
 
-## Project setup
-```
-yarn install
-```
+## Deploy
+### Eagle
+1. 检查环境变量, 参考`.env.example`
+2. 检查HOST, 参考`.host.example`
+3. 修改`yml`配置参数
+4. 设置参数`spring.profiles.active=dev`并启动`AppApplication`
+5. 执行 `sh scripts/docker-compose.sh`
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+**内网穿透**请参考 `scripts/proxy.sh` 内网穿透(`仅支持MacOS`)
 
-### Compiles and minifies for production
-```
-yarn build
-```
+### Eagle UI
+1. 基础环境，Node
+2. `npm install`
+3. `npm start`
 
-### Lints and fixes files
-```
-yarn lint
-```
+### Eagle Mall
+1. 基础环境，Node
+2. `npm install`
+3. `npm serve`
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## UI
+### 移动商城
+<img src="http://cdn.hocgin.top/mobile.gif" width="404" alt="UI"/>
+
+### 管理平台
+<img src="http://cdn.hocgin.top/pcc.gif" width="800" alt="UI"/>
+<img src="http://cdn.hocgin.top/3A30AEEC-9D0B-40C1-B271-BCA9C37F7113.png" width="404" alt="UI"/>
