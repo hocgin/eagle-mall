@@ -61,4 +61,11 @@ export const OrderTabs = {
   },
 };
 
+export const PaymentWay = {
+  AliPayWAP: {
+    name: '支付宝',
+    value: 2,
+  }
+};
+
 export default Global;

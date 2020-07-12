@@ -116,7 +116,15 @@ export default {
       }
     },
     async [actions.CANCEL_MY_ORDER](_, {payload, callback}) {
-      let result = await order.cancelMyOrder(payload);
+      let result = await order.getAvailableCoupons(payload);
+      if (result.success) {
+        if (callback) callback(result);
+      } else {
+        Toast.fail(result.message);
+      }
+    },
+    async [actions.GET_AVAILABLE_COUPONS](_, {payload, callback}) {
+      let result = await order.getAvailableCoupons(payload);
       if (result.success) {
         if (callback) callback(result);
       } else {

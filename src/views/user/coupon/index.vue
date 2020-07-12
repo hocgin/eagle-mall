@@ -18,6 +18,7 @@
   import {mapActions} from "vuex";
   import * as models from "@/store/models-types";
   import * as actions from "@/store/actions-types";
+  import {Convert} from "@/utils/convert";
 
   export default {
     components: {Toolbar, CouponList},
@@ -41,21 +42,10 @@
       list(records = []) {
         let coupons = [];
         let disabledCoupons = [];
-        for (let {id, title, credit, couponType, minPoint, platformName, useTypeName, createdAt, endAt, instructions, useStatus} of records) {
+        for (let item of records) {
 
-          let coupon = {
-            id,
-            valueDesc: `${credit.toFixed(1)}`,
-            unitDesc: couponType === 0 ? '元' : '折',
-            value: credit,
-            startAt: createdAt / 1000,
-            endAt: endAt / 1000,
-            condition: `${useTypeName}\n${platformName}平台\n满¥${minPoint}可用`,
-            description: `${instructions || ''}`,
-            name: title
-          };
-
-          if (useStatus === 0) {
+          let coupon = Convert.convertCoupon(item);
+          if (item.useStatus === 0) {
             coupons.push(coupon);
           } else {
             disabledCoupons.push(coupon);

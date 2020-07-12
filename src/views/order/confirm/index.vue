@@ -22,7 +22,9 @@
                    :originprice="formatMoney(item.totalAmount)"
                    :price="formatMoney(item.realAmount)"
                    v-bind:key="item.id"/>
-      <CouponCell @click="visibleCoupon = true"/>
+      <CouponCell @click="visibleCoupon = true"
+                  :chosen-coupon="chosenCoupon"
+                  :coupons="coupons"/>
       <SubmitBar :disabled="totalAmount === null"
                  @submit="onSubmit"
                  :price="totalAmount" button-text="提交订单" native-type="submit"/>
@@ -31,8 +33,11 @@
            round
            position="bottom"
            style="height: 90%; padding-top: 4px;">
-      <CouponList :show-close-button="false"
-                  :show-exchange-bar="false"/>
+      <CouponList @change="onChangeCoupon"
+                  :chosen-coupon="chosenCoupon"
+                  :show-exchange-bar="false"
+                  :coupons="coupons"
+                  :disabled-coupons="disabledCoupons"/>
     </Popup>
     <Popup v-model="visibleChooseAddress"
            round
@@ -61,6 +66,7 @@
   import Global from "@/utils/constant/global";
   import {Util} from "@/utils/util";
   import Goto from "@/utils/Goto";
+  import {Convert} from "@/utils/convert";
 
   export default {
     components: {
@@ -77,12 +83,18 @@
     },
     data() {
       return {
-        selectedAddressId: null,
-        address: null,
         list: [],
         totalAmount: null,
-        visibleCoupon: false,
+        // 收货地址
         visibleChooseAddress: false,
+        selectedAddressId: null,
+        address: null,
+        // 优惠券
+        selectedCouponId: null,
+        chosenCoupon: -1,
+        visibleCoupon: false,
+        coupons: [],
+        disabledCoupons: [],
       }
     },
     computed: {
@@ -99,13 +111,14 @@
     },
     mounted() {
       this._getAddressList();
-      let {items} = this.$route.query;
-      this.items = JSON.parse(items);
-      this._calcOrder(this.items);
+      this.reCalcOrder();
     },
     watch: {
       address({id}) {
         this.selectedAddressId = id;
+      },
+      chosenCoupon(index) {
+        this.selectedCouponId = this.coupons[index]?.id ?? null;
       }
     },
     methods: {
@@ -114,7 +127,8 @@
       }),
       ...mapActions(models.ME, {
         createMyOrder: actions.CREATE_ORDER,
-        pagingMyAddress: actions.PAGING_MY_ADDRESS
+        pagingMyAddress: actions.PAGING_MY_ADDRESS,
+        getAvailableCoupons: actions.GET_AVAILABLE_COUPONS
       }),
       formatMoney: Util.money,
       onClickAddAddress() {
@@ -122,6 +136,9 @@
       },
       onClickEditAddress({id}) {
         Goto.editAddress(id);
+      },
+      onChangeCoupon(index) {
+        this.chosenCoupon = index;
       },
       onSelectAddress(item) {
         this.address = {
@@ -140,11 +157,17 @@
             receiver: {
               ...this.address,
             },
+            userCouponId: this.selectedCouponId,
           },
           callback: ({data}) => {
             Goto.payOrder(data);
           }
         });
+      },
+      reCalcOrder() {
+        let {items} = this.$route.query;
+        this.items = JSON.parse(items);
+        this._calcOrder(this.items);
       },
       _getAddressList() {
         this.pagingMyAddress({payload: {page: 1, size: 10000}});
@@ -155,7 +178,7 @@
           return;
         }
 
-        let callback = ({data}) => {
+        let calcOrderCallback = ({data}) => {
           this.list = (data?.items || []);
           this.totalAmount = (data?.totalAmount * 100);
           if (this.address === null) {
@@ -173,15 +196,15 @@
               address: `${defaultAddress.province} ${defaultAddress.city} ${defaultAddress.region} ${defaultAddress.detailAddress}`,
             } : null;
           }
-
+        };
+        let availableCouponCallback = ({data: {availableCoupon = [], unavailableCoupon = []}}) => {
+          this.coupons = availableCoupon.map(item => Convert.convertCoupon(item));
+          this.disabledCoupons = unavailableCoupon.map(item => Convert.convertCoupon(item));
         };
 
-        this.calcOrder({
-          payload: {
-            items: values,
-          },
-          callback
-        });
+        let payload = {items: values, userCouponId: this.selectedCouponId};
+        this.calcOrder({payload: payload, callback: calcOrderCallback});
+        this.getAvailableCoupons({payload: payload, callback: availableCouponCallback});
       },
     }
   }

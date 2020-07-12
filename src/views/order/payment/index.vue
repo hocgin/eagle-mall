@@ -32,12 +32,13 @@
   import * as models from "@/store/models-types";
   import * as actions from "@/store/actions-types";
   import {Util} from "@/utils/util";
+  import {PaymentWay} from "@/utils/constant/global";
 
   export default {
     components: {CountDown, Toolbar, Button},
     data() {
       return {
-        paymentWay: 1,
+        paymentWay: PaymentWay.AliPayWAP.value,
         tradeSn: null,
         time: null,
         totalFee: null,
@@ -65,8 +66,11 @@
       }),
       formatMoney: Util.money,
       onSubmit() {
-        let callback = ({data}) => {
-          console.log('调用支付软件', data);
+        let callback = ({data:{paymentWay, form}}) => {
+          if (paymentWay === PaymentWay.AliPayWAP.value) {
+            document.write(form);
+          }
+
         };
         this.payTrade({
           payload: {
