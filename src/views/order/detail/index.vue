@@ -180,11 +180,11 @@
           };
           this.list = (data.orderItems || []);
           this.discountMap = [{
-            title: '优惠券',
-            value: data.couponAmount,
+            title: '活动优惠金额',
+            value: data.discountAmount,
           }, {
             title: '卖家优惠',
-            value: data.discountAmount,
+            value: data.adjustmentDiscountAmount,
           }];
 
           this.chargeMap = [{

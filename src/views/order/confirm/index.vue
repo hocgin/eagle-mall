@@ -164,6 +164,12 @@
               id: defaultAddress.id,
               name: defaultAddress.name,
               phone: defaultAddress.phone,
+              province: defaultAddress.province,
+              city: defaultAddress.city,
+              region: defaultAddress.region,
+              detailAddress: defaultAddress.detailAddress,
+              postCode: defaultAddress.postCode,
+              adCode: defaultAddress.adCode,
               address: `${defaultAddress.province} ${defaultAddress.city} ${defaultAddress.region} ${defaultAddress.detailAddress}`,
             } : null;
           }
