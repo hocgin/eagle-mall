@@ -25,9 +25,9 @@
       <CouponCell @click="visibleCoupon = true"
                   :chosen-coupon="chosenCoupon"
                   :coupons="coupons"/>
-      <SubmitBar :disabled="totalAmount === null"
+      <SubmitBar :disabled="payAmount === null"
                  @submit="onSubmit"
-                 :price="totalAmount" button-text="提交订单" native-type="submit"/>
+                 :price="payAmount" button-text="提交订单" native-type="submit"/>
     </div>
     <Popup v-model="visibleCoupon"
            round
@@ -66,7 +66,6 @@
   import Global from "@/utils/constant/global";
   import {Util} from "@/utils/util";
   import Goto from "@/utils/Goto";
-  import {Convert} from "@/utils/convert";
 
   export default {
     components: {
@@ -85,6 +84,7 @@
       return {
         list: [],
         totalAmount: null,
+        payAmount: null,
         // 收货地址
         visibleChooseAddress: false,
         selectedAddressId: null,
@@ -119,6 +119,7 @@
       },
       chosenCoupon(index) {
         this.selectedCouponId = this.coupons[index]?.id ?? null;
+        this.reCalcOrder();
       }
     },
     methods: {
@@ -128,7 +129,6 @@
       ...mapActions(models.ME, {
         createMyOrder: actions.CREATE_ORDER,
         pagingMyAddress: actions.PAGING_MY_ADDRESS,
-        getAvailableCoupons: actions.GET_AVAILABLE_COUPONS
       }),
       formatMoney: Util.money,
       onClickAddAddress() {
@@ -157,7 +157,7 @@
             receiver: {
               ...this.address,
             },
-            userCouponId: this.selectedCouponId,
+            selectedCouponId: this.selectedCouponId,
           },
           callback: ({data}) => {
             Goto.payOrder(data);
@@ -181,6 +181,7 @@
         let calcOrderCallback = ({data}) => {
           this.list = (data?.items || []);
           this.totalAmount = (data?.totalAmount * 100);
+          this.payAmount = (data?.payAmount * 100);
           if (this.address === null) {
             let defaultAddress = data.defaultAddress;
             this.address = defaultAddress ? {
@@ -196,15 +197,34 @@
               address: `${defaultAddress.province} ${defaultAddress.city} ${defaultAddress.region} ${defaultAddress.detailAddress}`,
             } : null;
           }
-        };
-        let availableCouponCallback = ({data: {availableCoupon = [], unavailableCoupon = []}}) => {
-          this.coupons = availableCoupon.map(item => Convert.convertCoupon(item));
-          this.disabledCoupons = unavailableCoupon.map(item => Convert.convertCoupon(item));
+
+          let coupons = [];
+          let disabledCoupons = [];
+          for (let coupon of (data?.coupons || [])) {
+            let item = {
+              id: coupon.id,
+              valueDesc: coupon.valueDesc,
+              unitDesc: coupon.unitDesc,
+              value: coupon.useAmount != null ? coupon.useAmount * 100 : null,
+              startAt: coupon.startAt / 1000,
+              endAt: coupon.endAt / 1000,
+              condition: `${coupon.condition}`,
+              description: `${coupon.instructions || ''}`,
+              name: coupon.title,
+              reason: coupon.reason,
+            };
+            if (coupon.usable) {
+              coupons.push(item);
+            } else {
+              disabledCoupons.push(item);
+            }
+          }
+          this.coupons = coupons;
+          this.disabledCoupons = disabledCoupons;
         };
 
-        let payload = {items: values, userCouponId: this.selectedCouponId};
+        let payload = {items: values, selectedCouponId: this.selectedCouponId};
         this.calcOrder({payload: payload, callback: calcOrderCallback});
-        this.getAvailableCoupons({payload: payload, callback: availableCouponCallback});
       },
     }
   }

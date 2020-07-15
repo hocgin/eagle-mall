@@ -24,7 +24,6 @@ export const CONFIRM_MY_ORDER = 'confirmMyOrder';
 export const PAGING_MY_ORDER = 'pagingMyOrder';
 export const GET_MY_ORDER = 'getMyOrder';
 export const CANCEL_MY_ORDER = 'cancelMyOrder';
-export const GET_AVAILABLE_COUPONS = 'getAvailableCoupons';
 // = 退款申请
 export const CREATE_REFUND_APPLY = 'createRefundApply';
 // = 订单估价

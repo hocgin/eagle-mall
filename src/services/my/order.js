@@ -6,7 +6,6 @@ const API = {
   createRefundApply: `/api-mini/my/order/refund`,
   cancelMyOrder: `/api-mini/my/order/cancel`,
   confirmMyOrder: `/api-mini/my/order/confirm`,
-  getAvailableCoupons: `/api-mini/my/order/coupon`,
   getMyOrder: (id) => `/api-mini/my/order/${id}`,
 };
 
@@ -54,11 +53,5 @@ export default {
     });
   },
 
-  getAvailableCoupons(payload = {}) {
-    return request(API.getAvailableCoupons, {
-      method: 'POST',
-      body: {...payload,},
-    });
-  },
 
 };
