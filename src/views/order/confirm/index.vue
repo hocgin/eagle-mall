@@ -19,8 +19,8 @@
                    :thumb="item.imageUrl || '404'"
                    :title="item.title"
                    :spec="item.spec"
-                   :originprice="formatMoney(item.totalAmount)"
-                   :price="formatMoney(item.realAmount)"
+                   :originprice="formatMoney(item.price)"
+                   :price="formatMoney(item.price)"
                    v-bind:key="item.id"/>
       <CouponCell @click="visibleCoupon = true"
                   :chosen-coupon="chosenCoupon"
