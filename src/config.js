@@ -25,7 +25,7 @@ export default class Config {
         if (Config.isDev()) {
             return `http://127.0.0.1:8080`;
         }
-        return 'http://eagle.hocgin.top/api';
+        return 'https://eagle.hocgin.top/api/eagle';
     }
 
     /**
